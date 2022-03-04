@@ -2,10 +2,15 @@ import fastbook
 from fastbook import *
 from fastai.collab import *
 
-ratings = pd.read_csv('take_home_ss_ratings.xls')  
+#This script trains a collaborative filtering learner and predicts a score for a user, item pair
+#Requirements: csv data with user_id, item_id, and rating columns
+
+#Replace * with name of csv file
+ratings = pd.read_csv('*.csv')  
 dls = CollabDataLoaders.from_df(ratings, valid_pct=0.2, user_name='user_id', item_name='item_id', rating_name='rating', bs=64)
 
-#Create matrix factorization learner with 20 factors, 
+#Create matrix factorization learner with 20 factors
+#y_range is the rating range, set to 1, 5.0 for 1-5 star rating
 learn = collab_learner(dls, n_factors=20, y_range=(0, 1.0))
 learn.fit_one_cycle(5, 2e-2, wd=0.1)
 
